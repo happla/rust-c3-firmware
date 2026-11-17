@@ -1,0 +1,31 @@
+name: ESP32-C3 Firmware CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Check firmware
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Install Rust target
+        run: |
+          rustup update stable
+          rustup target add riscv32imc-unknown-none-elf
+          rustup component add rust-src
+
+      - name: Check firmware
+        run: cargo check
