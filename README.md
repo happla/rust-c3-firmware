@@ -1,4 +1,4 @@
-[![ESP32-C3 Firmware CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
+[![ESP32-C3 Firmware CI](https://github.com/happla/rust-c3-firmware/actions/workflows/ci.yml/badge.svg)](https://github.com/happla/rust-c3-firmware/actions/workflows/ci.yml)
 
 # Rust ESP32-C3 Embedded Control Firmware
 
