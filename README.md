@@ -1,3 +1,5 @@
+[![ESP32-C3 Firmware CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
+
 # Rust ESP32-C3 Embedded Control Firmware
 
 A small embedded firmware project written in Rust for the ESP32-C3 RISC-V microcontroller.
@@ -11,6 +13,13 @@ The project explores `no_std` Rust development, state-driven control logic, and 
 - **Architecture:** 32-bit RISC-V
 - **Flash:** 4 MB
 - **Debug output:** USB Serial/JTAG
+
+## Firmware execution
+
+The firmware running on the ESP32-C3, with diagnostic output
+displayed through USB Serial/JTAG.
+
+![ESP32-C3 firmware serial output](c3.png)
 
 ## Technology
 
