@@ -1,3 +1,5 @@
+
+
 #![no_std]
 #![no_main]
 
@@ -15,6 +17,14 @@ fn panic(_: &core::panic::PanicInfo) -> ! {
 
 esp_bootloader_esp_idf::esp_app_desc!();
 
+#[derive(Clone, Copy)]
+enum ControlState {
+    Init,
+    Idle,
+    Monitor,
+    Report,
+}
+
 #[main]
 fn main() -> ! {
     let config = esp_hal::Config::default()
@@ -25,20 +35,47 @@ fn main() -> ! {
     let mut usb_serial =
         UsbSerialJtag::new(peripherals.USB_DEVICE);
 
-    let mut counter: u32 = 0;
+    let mut state = ControlState::Init;
+    let mut cycles: u32 = 0;
 
     loop {
-        writeln!(
-            usb_serial,
-            "Rust ESP32-C3 heartbeat: {}",
-            counter
-        )
-        .ok();
+        state = match state {
+            ControlState::Init => {
+                writeln!(usb_serial, "INIT: Control system starting").ok();
+                ControlState::Idle
+            }
 
-        counter += 1;
+            ControlState::Idle => {
+                writeln!(usb_serial, "IDLE: Waiting for control interval").ok();
 
-        let start = Instant::now();
-        while start.elapsed() < Duration::from_secs(1) {}
+                let start = Instant::now();
+                while start.elapsed() < Duration::from_secs(1) {}
+
+                ControlState::Monitor
+            }
+
+            ControlState::Monitor => {
+                cycles = cycles.wrapping_add(1);
+
+                writeln!(
+                    usb_serial,
+                    "MONITOR: Cycle {}",
+                    cycles
+                ).ok();
+
+                ControlState::Report
+            }
+
+            ControlState::Report => {
+                writeln!(
+                    usb_serial,
+                    "REPORT: Completed cycle {}",
+                    cycles
+                ).ok();
+
+                ControlState::Idle
+            }
+        };
     }
 }
 
